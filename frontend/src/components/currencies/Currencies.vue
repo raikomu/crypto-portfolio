@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'Currencies',
   data () {
@@ -88,7 +90,7 @@ export default {
     }
   },
   mounted () {
-    this.$http.post('https://api-pub.bitfinex.com/v2/calc/fx?ccy1=XRP&ccy2=EUR')
+    axios.post('https://api-pub.bitfinex.com/v2/calc/fx?ccy1=XRP&ccy2=EUR')
       .then(response => (this.info = response))
   },
   methods: {

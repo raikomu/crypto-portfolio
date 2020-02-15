@@ -26,6 +26,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'rack-cors'
 # Use JWTSessions for authentication
 gem 'jwt_sessions', '~> 2.4.3'
+# Use Bitfinex API for currency prices
+gem 'bitfinex-rb', :require => "bitfinex"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

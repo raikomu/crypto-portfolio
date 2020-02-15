@@ -42,7 +42,7 @@
           <th class="border px-4 py-2">Amount</th>
           <th class="border px-4 py-2">Date of purchase</th>
           <th class="border px-4 py-2">Wallet location</th>
-          <th class="border px-4 py-2">Current market value (EUR)</th>
+          <th class="border px-4 py-2">Current market value (USD)</th>
           <th class="border px-4 py-2">Option</th>
         </tr>
       </thead>
@@ -52,7 +52,7 @@
           <td class="border px-4 py-2">{{ currency.amount }}</td>
           <td class="border px-4 py-2">{{ currency.purchased_at }}</td>
           <td class="border px-4 py-2">{{ currency.wallet }}</td>
-          <td class="border px-4 py-2"></td>
+          <td class="border px-4 py-2">{{ info }}</td>
           <td class="border px-4 py-2">
             <button @click.prevent="deleteCurrency(currency)"
                     class="bg-transparent hover:bg-red-500 text-red-700 font-bold
@@ -74,7 +74,8 @@ export default {
     return {
       currencies: [],
       newCurrency: [],
-      error: ''
+      error: '',
+      info: null
     }
   },
   created () {
@@ -85,6 +86,10 @@ export default {
         .then(response => { this.currencies = response.data })
         .catch(error => this.setError(error, 'Something went wrong'))
     }
+  },
+  mounted () {
+    this.$http.post('https://api-pub.bitfinex.com/v2/calc/fx?ccy1=XRP&ccy2=EUR')
+      .then(response => (this.info = response))
   },
   methods: {
     setError (error, text) {

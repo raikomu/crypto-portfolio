@@ -1,6 +1,6 @@
 <template>
   <div class="m-auto py-6">
-    <div class="text-red" v-if="error">{{ error }}</div>
+    <div class="text-red m-auto" v-if="error">{{ error }}</div>
     <h3 align="center" class="text-3xl mb-6">Add a new Currency</h3>
 
     <form action="" @submit.prevent="addCurrency">
@@ -8,9 +8,8 @@
         <label for="currency_name" class="block font-bold mb-2">Type</label>
         <select class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 mb-4 rounded shadow leading-tight
         focus:outline-none focus:shadow-outline" v-model="newCurrency.name">
-          <option value="Bitcoin">Bitcoin</option>
-          <option value="Ethereum">Ethereum</option>
-          <option value="Ripple">Ripple</option>
+          <option disabled>Select Currency Type</option>
+          <option :value="option" v-for="option in options" :key="option.id">{{ option }}</option>
         </select>
 
         <label for="currency_amount" class="block font-bold mb-2">Amount</label>
@@ -24,7 +23,7 @@
                focus:outline-none focus:shadow-outline">
 
         <label for="currency_wallet" class="block font-bold mb-2">Wallet</label>
-        <input type="text" v-model="newCurrency.wallet"
+        <input type="text" v-model="newCurrency.wallet" placeholder="Enter Wallet Location"
                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 mb-4 rounded shadow leading-tight
                focus:outline-none focus:shadow-outline">
 
@@ -52,7 +51,7 @@
           <td class="border px-4 py-2">{{ currency.amount }}</td>
           <td class="border px-4 py-2">{{ currency.purchased_at }}</td>
           <td class="border px-4 py-2">{{ currency.wallet }}</td>
-          <td class="border px-4 py-2"></td>
+          <td class="border px-4 py-2">{{ currency.market_value }}</td>
           <td class="border px-4 py-2">
             <button @click.prevent="deleteCurrency(currency)"
                     class="bg-transparent hover:bg-red-500 text-red-700 font-bold
@@ -73,8 +72,13 @@ export default {
   data () {
     return {
       currencies: [],
-      newCurrency: [],
-      error: ''
+      newCurrency: {
+        name: 'Select Currency Type',
+        amount: 1,
+        purchased_at: new Date().toISOString().slice(0, 10)
+      },
+      error: '',
+      options: ['Bitcoin', 'Ethereum', 'Ripple']
     }
   },
   created () {
@@ -103,7 +107,11 @@ export default {
       })
         .then(response => {
           this.currencies.push(response.data)
-          this.newCurrency = ''
+          this.newCurrency = {
+            name: 'Select Currency Type',
+            amount: 1,
+            purchased_at: new Date().toISOString().slice(0, 10)
+          }
         })
         .catch(error => this.setError(error, "Couldn't add currency"))
     },

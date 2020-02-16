@@ -6,7 +6,7 @@ class CurrenciesController < ApplicationController
   def index
     @currencies = current_user.currencies.all
 
-    render json: @currencies
+    render json: @currencies, methods: :market_value
   end
 
   # POST /currencies
@@ -14,7 +14,7 @@ class CurrenciesController < ApplicationController
     @currency = current_user.currencies.build(currency_params)
 
     if @currency.save
-      render json: @currency, status: :created
+      render json: @currency, status: :created, methods: :market_value
     else
       render json: @currency.errors, status: :unprocessable_entity
     end
